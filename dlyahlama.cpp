@@ -73,9 +73,10 @@ int main()
 		q = 100 - P;
 		//
 		
-		//Пункт 3.2
-		double d;
-		d = Di[n - 1];
+		//Пункт 3.2 скорее всего не нужен
+		//double d;
+		//d = Di[n - 1];
+		
 		
 
 		//3.3
@@ -84,12 +85,12 @@ int main()
 		Hrs = Hi[n-1] + Hrg;
 		Hhi = max(Hts, Hrs);
 		Hlo = min(Hts, Hrs);
-		Ep = (Hhi - Hlo) / d;
+		Ep = (Hhi - Hlo) / D; //d?
 		//
 
 		//3.4
 		double Nd1km50, Nd1kmp;
-		//
+		//????
 
 		//3.5
 		double Ae, Cp, Ap, Qe;
@@ -99,7 +100,7 @@ int main()
 			Ap = 1 / Cp;
 		else
 			Ap = pow(10, 6);
-		Qe = d / Ae;
+		Qe = D / Ae; //d?
 		//
 		
 		//3.6
@@ -108,11 +109,66 @@ int main()
 		//
 		
 		//3.7
-		
-		// 
-	
+		double Qtim, Qtr, *Vmaxim, Qtpos, Qrpos;
+		Vmaxim = new double[n];
+		for (int i = 2; i < n - 1; i++)
+		{
+			Qtim = max((Hi[i] - Hts) / Di[i] - (500 * Di[i]) / Ae, INT_MIN); // спросить по поводу инт_мина?
+		}
+		Qtr = (Hrs - Hts) / D - (500 * D) / Ae;
+		if (Qtim < Qtr)
+		{
+			for (int i = 2, j = 0; i < n - 1; i++, j++) // i = 2 ????
+			{
+				Vmaxim[j] = max((Hi[i] + (500 * Di[i] * (D - Di[i])) / Ae - (Hts * (D - Di[i]) + Hrs * Di[i]) / D) * sqrt((0.0002 * D) / Lamda * Di[i] * (D - Di[i])), INT_MIN);
+				if (Vmaxim[j] > H);
+				{
 
+				}
+			}
+
+		}
+		//
+	
+		//3.8
 		
+		//
+
+		//3.9
+		//значения горизонтальной длины трассы от передатчика до общего объема и от общего объема до приемника
+
+		double Dtcv, Drcv;
+		Dtcv = (D * tan(0.001 * Qrpos + 0.5 + Qe) - 0.001 * (Hts - Hrs)) / (tan(0.001 * Qtpos + 0.5 * Qe) + tan(0.001 * Qrpos + 0.5 * Qe));
+
+		if ((Dtcv >= 0) && (Dtcv <= D))
+		{
+			Drcv = D - Dtcv;
+		}
+		//Расчеты трассы по дуге большого кругаэ(возможен рофл с переводом единиц в другие)
+		//H2
+		double Delta_lon, r, FId, Dgc, X1, Y1, Bt2r, FIdrad, pi = 3.14;
+
+		Delta_lon = FIre - FIte;
+
+		r = sin(FItn) * sin(FIrn) + cos(FItn) * cos(FIrn) * cos(Delta_lon);
+
+		FId = acos(r);
+
+		FIdrad = (FId / 180) * pi;//тот самый перевод, не знаю, нужен ли :D
+
+		Dgc = FIdrad * Re;
+
+		X1 = sin(FIrn) - r * sin(FItn);
+		Y1 = cos(FItn) * cos(FItn) * sin(Delta_lon);
+
+		if ((abs(X1) < pow(10, -9)) && (abs(Y1) < pow(10, -9)))
+		{
+			Bt2r = FIre;
+		}
+		else
+			Bt2r = atan(2 * (Y1, X1));
+		//H.3Расчет промежуточной точки трассы
+
 
 		delete[]Di;
 		delete[]Hi;
