@@ -135,18 +135,19 @@ int main()
 		//
 
 		//3.9
-		//значения горизонтальной длины трассы от передатчика до общего объема и от общего объема до приемника
+	//значения горизонтальной длины трассы от передатчика до общего объема и от общего объема до приемника
 
-		double Dtcv, Drcv;
+		double Dtcv, Drcv, Hcv;
 		Dtcv = (D * tan(0.001 * Qrpos + 0.5 + Qe) - 0.001 * (Hts - Hrs)) / (tan(0.001 * Qtpos + 0.5 * Qe) + tan(0.001 * Qrpos + 0.5 * Qe));
+
 
 		if ((Dtcv >= 0) && (Dtcv <= D))
 		{
 			Drcv = D - Dtcv;
 		}
-		//Расчеты трассы по дуге большого кругаэ(возможен рофл с переводом единиц в другие)
+		//долгота и широта общего объема.Расчеты трассы по дуге большого кругаэ(возможна штука с переводом единиц в другие)
 		//H2
-		double Delta_lon, r, FId, Dgc, X1, Y1, Bt2r, FIdrad, pi = 3.14;
+		double Delta_lon, r, FId, Dgc, X1, Y1, Bt2r, FIdrad, pi = 3.14, FIpnte;
 
 		Delta_lon = FIre - FIte;
 
@@ -168,6 +169,30 @@ int main()
 		else
 			Bt2r = atan(2 * (Y1, X1));
 		//H.3Расчет промежуточной точки трассы
+		double FIpnt, s, FIpntn, X2, Y2;
+		FIpnt = Dtcv / Re;
+
+		s = sin(FIrn) * cos(FIpnt) + cos(FItn) * sin(FIpnt) * cos(Bt2r);
+
+		FIpntn = asin(s);
+
+		X2 = cos(FIpnt) - s * sin(FItn);
+		Y2 = cos(FItn) * sin(FIpnt) * sin(Bt2r);
+
+		if ((abs(X2) < pow(10, -9)) && (abs(Y2) < pow(10, -9)))
+		{
+			FIpnte = Bt2r;
+		}
+		else
+			FIpnte = FIte + atan(2 * (Y2, X2));
+
+		//высота общего объема тропосферного рассеяния
+
+		Hcv = Hts + 1000 * Dtcv * tan(0.001 * Qtpos) + ((1000 * pow(Dtcv, 2)) / 2 * Ae);
+
+		//долгота и широта средних точек участков.Расчеты трассы по дуге большого круга.Тут я все что после H7 переписал с установленными значениями из 3.9(получается, что меняет свое значение чтооо???)
+		FIpnt = (0.5 * Dtcv) / Re;
+		//
 
 
 		//3.10
